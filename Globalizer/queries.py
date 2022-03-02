@@ -5,8 +5,6 @@ import pandas as pd
 PATH_TO_DB = 'raw_data/countrypop(2).db'
 
 # connect to database
-# path to local database
-PATH_TO_DB = '../raw_data/countrypop(2).db'
 
 # connect to database
 def get_data(country):
