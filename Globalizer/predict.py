@@ -1,5 +1,5 @@
 #data sourcing
-from Globalizer.queries import get_data
+from Globalizer.queries import advanced_get_data
 
 #preprocessing and modelling
 from sklearn.cluster import KMeans
@@ -13,7 +13,7 @@ def predict(country, n_centers):
     It returns a list of optimal coordinates.
     """
     # get df from queries.py
-    df_country = get_data(country)
+    df_country = advanced_get_data(country)
 
 
     # scaler on pop column
@@ -36,4 +36,4 @@ def predict(country, n_centers):
 # to check your code, run:
 # python -m Globalizer.predict
 if __name__=="__main__":
-    print(predict(country = "AFG", n_centers = 5))
+    print(predict(country = ["AFG","ABW"], n_centers = 5))
