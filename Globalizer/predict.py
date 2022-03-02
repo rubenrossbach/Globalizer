@@ -1,5 +1,4 @@
-import sqlite3
-import pandas as pd
+
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
 
@@ -12,23 +11,12 @@ def predict(country, n_centers):
     a number of centers n_centers.
     It returns a list of optimal coordinates.
     """
-    # connect to database
-    conn = sqlite3.connect(PATH_TO_DB)
-    db = conn.cursor()
-
-    # load data with pandas
-    param = (country, )
-    query = """
-            SELECT lon, lat, pop
-            FROM {}
-            """
-    data = pd.read_sql_query(query.format(country), con=conn)
 
     # do kmeans clustering with n_centers
     # data should contain the country data
 
     # return center coordinates
-    return kmeans.cluster_centers_
+    return #kmeans.cluster_centers_
 
 
 ## Check ##
