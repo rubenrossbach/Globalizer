@@ -12,9 +12,9 @@ def get_data(country):
     conn = sqlite3.connect(PATH_TO_DB)
 
     param = (country)
-    query = (f"""
+    query = ("""
                 SELECT lon, lat, pop
-                FROM {param}
+                FROM {}
 
                 """)
 
