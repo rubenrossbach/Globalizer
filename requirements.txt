@@ -9,6 +9,7 @@ numpy
 pandas
 scikit-learn
 scipy
+psycopg2-binary
 
 # tests/linter
 black
@@ -35,3 +36,4 @@ termcolor
 rioxarray
 rasterio
 folium
+python-dotenv
