@@ -84,4 +84,4 @@ def smart_clustering(country, threshold=50):
 # to check your code, run:
 # python -m Globalizer.predict
 if __name__=="__main__":
-    print(k_clustering(country = "ABW", n_centers = 5))
+    print(k_clustering(country = ["ABW"], n_centers = 5))

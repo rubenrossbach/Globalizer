@@ -8,8 +8,8 @@ wheel>=0.29
 numpy
 pandas
 scikit-learn
-sqlite3
 scipy
+psycopg2-binary
 
 # tests/linter
 black
@@ -36,3 +36,4 @@ termcolor
 rioxarray
 rasterio
 folium
+python-dotenv
