@@ -9,6 +9,7 @@ numpy
 pandas
 scikit-learn
 sqlite3
+scipy
 
 # tests/linter
 black
@@ -22,6 +23,7 @@ gcsfs
 google-cloud-storage
 mlflow
 s3fs
+fastapi
 
 # utilities
 six>=1.14

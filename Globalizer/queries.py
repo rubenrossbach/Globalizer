@@ -4,7 +4,7 @@ import pandas as pd
 # path to local database
 PATH_TO_DB = 'raw_data/countrypop_small19.db'
 
-# not sure if we still need this function
+# not sure if we still need this function, I guess not
 def get_data(country):
     '''This function get's the Countrydata from a local Database
     and converts it to a Dataframe
