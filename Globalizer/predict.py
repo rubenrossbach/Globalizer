@@ -1,5 +1,5 @@
 #data sourcing
-from Globalizer.queries import advanced_get_data
+from Globalizer.queries import advanced_get_data, get_data
 
 #preprocessing and modelling
 from sklearn.cluster import MiniBatchKMeans, KMeans
@@ -37,7 +37,7 @@ def k_clustering(country, n_centers=None):
         'lat': np.arcsin(centers_3d[:,2] / R) * 180 / np.pi,
         'lon': np.arctan2(centers_3d[:,1], centers_3d[:,0]) * 180 / np.pi
     })
-    centers = np.array(centers)
+    centers = np.array(centers).tolist()
     return {
       "avg_distance": avg_distance,
       "centers": centers
@@ -74,7 +74,7 @@ def smart_clustering(country, threshold=50):
         'lat': np.arcsin(centers_3d[:,2] / R) * 180 / np.pi,
         'lon': np.arctan2(centers_3d[:,1], centers_3d[:,0]) * 180 / np.pi
     })
-    centers = np.array(centers)
+    centers = np.array(centers).tolist()
     return {
       "avg_distance": avg_distance,
       "centers": centers
@@ -84,4 +84,4 @@ def smart_clustering(country, threshold=50):
 # to check your code, run:
 # python -m Globalizer.predict
 if __name__=="__main__":
-    print(k_clustering(country = ["AFG","ABW"], n_centers = 5))
+    print(k_clustering(country = "ABW", n_centers = 5))
