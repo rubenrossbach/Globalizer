@@ -17,15 +17,19 @@ def index():
     return {"ok": True}
 
 @app.get("/predict")
-def predict(country, treshhold=50, n_centers=None):
+def predict(country, threshold=50, n_centers=None):
     '''This function controls whether
     we use the Kmeans or the KmeansMinibatch. By default it's
     the Minibatch with 50km as threshold'''
-    return smart_clustering(country, threshold=50) if n_centers == None else k_clustering(country, n_centers)
+    country = country.split(",")
+    threshold= float(threshold)
+    if n_centers != None:
+        n_centers= int(n_centers)
+    return smart_clustering(country, threshold) if n_centers == None else k_clustering(country, n_centers)
 
 
 ## Check ##
 # to check your code, run:
 # python -m api.fast
 if __name__=="__main__":
-    print(predict(country = ["ABW"], n_centers = None))
+    print(predict(country = "ABW", n_centers = None))
