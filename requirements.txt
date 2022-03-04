@@ -35,5 +35,4 @@ termcolor
 # geospatial
 rioxarray
 rasterio
-folium
 python-dotenv
