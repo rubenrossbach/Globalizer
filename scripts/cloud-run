@@ -1,0 +1,12 @@
+#!/usr/bin/bash
+
+export PROJECT_ID=le-wagon-data-337617
+gcloud config set project $PROJECT_ID
+
+export DOCKER_IMAGE_NAME=globalizer
+
+docker build -t eu.gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME .
+
+docker push eu.gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME
+
+gcloud run deploy --image eu.gcr.io/$PROJECT_ID/$DOCKER_IMAGE_NAME --platform managed --region europe-west3
