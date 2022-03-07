@@ -1,7 +1,6 @@
-from api.fast import predict
+from api.fast import index
 
-def testing_get_centers():
-    # test if getting centers works
-    # centers should have len 2 (lat, lon)
-    prediction = predict(country="ABW", n_centers=1)
-    assert len(prediction['centers'][0]) == 2
+def testing_index():
+    # test if API gives response
+    response = index()
+    assert response['ok'] == True
