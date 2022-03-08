@@ -21,7 +21,7 @@ def get_data(country):
     '''This function get's the Countrydata from a local Database
     and converts it to a Dataframe
     WARNING: This Param substitution is, vulnerable to Injections.'''
-    conn = psycopg2.connec(PATH_TO_DB)
+    conn = psycopg2.connect(PATH_TO_DB)
     print(conn)
     param = (country)
     query = ("""
