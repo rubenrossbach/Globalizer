@@ -122,6 +122,7 @@ def radius_clustering(country, radius=100, percent=80):
     centers = np.array(centers).tolist()
     return {
         "avg_distance": avg_distance,
+        "Population in Radius": pop_in_radius,
         "Percent in Radius": pop_in_radius / total_pop,
         "centers": centers
     }
