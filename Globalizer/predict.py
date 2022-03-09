@@ -21,9 +21,10 @@ def k_clustering(country, n_centers=None):
     # scaling
     scaler = MinMaxScaler()
     df_country.loc[:,'pop'] = scaler.fit_transform(df_country[['pop']])
-    kmeans = KMeans(n_clusters = n_centers,
-                    max_iter = 300,
-                    n_init = 10)
+    kmeans = MiniBatchKMeans(n_clusters = n_centers,
+                                        max_iter = 300,
+                                        batch_size=256*4,
+                                        n_init = 10)
     kmeans.fit(X=df_country[['x', 'y', 'z']], sample_weight=df_country['pop'])
     # calculate avg distance
     avg_distance = (sum(np.min(cdist(df_country[['x', 'y', 'z']],
