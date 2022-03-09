@@ -80,8 +80,55 @@ def smart_clustering(country, threshold=50):
       "centers": centers
     }
 
+# clustering based on radius + % of population
+# "I want to reach __% of the population with a max distance of __km"
+def radius_clustering(country, radius=100, percent=80):
+
+    # get df from queries.py
+    df= advanced_get_data(country)
+
+    scaler = MinMaxScaler()
+    df.loc[:,'pop'] = scaler.fit_transform(df[['pop']])
+    total_pop = df['pop'].sum()
+    for k in range(1, 101):
+        kmeans = MiniBatchKMeans(n_clusters = k,
+                                max_iter = 300,
+                                batch_size=256*4,
+                                n_init = 10)
+        kmeans.fit(X=df[['x', 'y', 'z']], sample_weight=df['pop'])
+        # calculate distance to nearest center
+        distance = np.min(cdist(df[['x', 'y', 'z']],
+                                kmeans.cluster_centers_,
+                                'euclidean'),
+                        axis=1)
+        # sum population within radius
+        pop_in_radius = df[distance < radius]['pop'].sum()
+        # stop when __% of pop within __km
+        if pop_in_radius / total_pop > percent/100:
+            break
+    # calculate average distance
+    avg_distance = (sum(np.min(cdist(df[['x', 'y', 'z']],
+                                        kmeans.cluster_centers_,
+                                        'euclidean'),
+                                    axis = 1)*df['pop'])) / df['pop'].sum()
+    # transform 3D to 2D coordinates
+    centers_3d = kmeans.cluster_centers_
+    R = 6371
+    centers = pd.DataFrame({
+        'lat': np.arcsin(centers_3d[:,2] / R) * 180 / np.pi,
+        'lon': np.arctan2(centers_3d[:,1], centers_3d[:,0]) * 180 / np.pi
+    })
+    centers = np.array(centers).tolist()
+    return {
+        "avg_distance": avg_distance,
+        "Percent in Radius": pop_in_radius / total_pop,
+        "centers": centers
+    }
+
+
 ## Check ##
 # to check your code, run:
 # python -m Globalizer.predict
 if __name__=="__main__":
-    print(k_clustering(country = ["ABW"], n_centers = 5))
+    #print(k_clustering(country = ["ABW"], n_centers = 5))
+    print(radius_clustering(country = ["AUT"]))
