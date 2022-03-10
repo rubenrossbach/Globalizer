@@ -88,10 +88,8 @@ def radius_clustering(country, radius=100, percent=80):
     # get df from queries.py
     df= advanced_get_data(country)
 
-    scaler = MinMaxScaler()
-    df.loc[:,'pop'] = scaler.fit_transform(df[['pop']])
     total_pop = df['pop'].sum()
-    for k in range(1, 101):
+    for k in range(1, 201):
         kmeans = MiniBatchKMeans(n_clusters = k,
                                 max_iter = 300,
                                 batch_size=256*4,
@@ -112,14 +110,41 @@ def radius_clustering(country, radius=100, percent=80):
                                         kmeans.cluster_centers_,
                                         'euclidean'),
                                     axis = 1)*df['pop'])) / df['pop'].sum()
-    # transform 3D to 2D coordinates
+    # remove unnecessary centers
     centers_3d = kmeans.cluster_centers_
+    row = 0
+    while row < len(centers_3d):
+        # delete center by center and check if condition still met
+        try:
+            centers_reduced = np.delete(arr = centers_3d, obj=row, axis=0)
+        except:
+            break
+        # calculate distance to nearest center
+        distance_tmp = np.min(cdist(df[['x', 'y', 'z']],
+                                centers_reduced,
+                                'euclidean'),
+                        axis=1)
+        # sum population within radius
+        pop_in_radius = df[distance_tmp < radius]['pop'].sum()
+        # stop when __% of pop within __km
+        if pop_in_radius / total_pop >= percent/100:
+            centers_3d = centers_reduced
+            distance = distance_tmp
+        # increase index only when no deletion
+        else:
+            row += 1
+
+    # transform 3D to 2D coordinates
     R = 6371
     centers = pd.DataFrame({
         'lat': np.arcsin(centers_3d[:,2] / R) * 180 / np.pi,
         'lon': np.arctan2(centers_3d[:,1], centers_3d[:,0]) * 180 / np.pi
     })
     centers = np.array(centers).tolist()
+
+    pop_in_radius = df[distance < radius]['pop'].sum()
+    total_pop = df['pop'].sum()
+
     return {
         "avg_distance": avg_distance,
         "Population in Radius": pop_in_radius,
@@ -133,4 +158,4 @@ def radius_clustering(country, radius=100, percent=80):
 # python -m Globalizer.predict
 if __name__=="__main__":
     #print(k_clustering(country = ["ABW"], n_centers = 5))
-    print(radius_clustering(country = ["AUT"]))
+    print(radius_clustering(country = ["AUT"], radius=100, percent=80))
