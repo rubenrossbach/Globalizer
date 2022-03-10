@@ -105,11 +105,7 @@ def radius_clustering(country, radius=100, percent=80):
         # stop when __% of pop within __km
         if pop_in_radius / total_pop > percent/100:
             break
-    # calculate average distance
-    avg_distance = (sum(np.min(cdist(df[['x', 'y', 'z']],
-                                        kmeans.cluster_centers_,
-                                        'euclidean'),
-                                    axis = 1)*df['pop'])) / df['pop'].sum()
+
     # remove unnecessary centers
     centers_3d = kmeans.cluster_centers_
     row = 0
@@ -117,13 +113,13 @@ def radius_clustering(country, radius=100, percent=80):
         # delete center by center and check if condition still met
         try:
             centers_reduced = np.delete(arr = centers_3d, obj=row, axis=0)
+            # calculate distance to nearest center
+            distance_tmp = np.min(cdist(df[['x', 'y', 'z']],
+                                    centers_reduced,
+                                    'euclidean'),
+                            axis=1)
         except:
             break
-        # calculate distance to nearest center
-        distance_tmp = np.min(cdist(df[['x', 'y', 'z']],
-                                centers_reduced,
-                                'euclidean'),
-                        axis=1)
         # sum population within radius
         pop_in_radius = df[distance_tmp < radius]['pop'].sum()
         # stop when __% of pop within __km
@@ -133,6 +129,11 @@ def radius_clustering(country, radius=100, percent=80):
         # increase index only when no deletion
         else:
             row += 1
+    # calculate average distance
+    avg_distance = (sum(np.min(cdist(df[['x', 'y', 'z']],
+                                        centers_3d,
+                                        'euclidean'),
+                                    axis = 1)*df['pop'])) / df['pop'].sum()
 
     # transform 3D to 2D coordinates
     R = 6371
@@ -158,4 +159,4 @@ def radius_clustering(country, radius=100, percent=80):
 # python -m Globalizer.predict
 if __name__=="__main__":
     #print(k_clustering(country = ["ABW"], n_centers = 5))
-    print(radius_clustering(country = ["AUT"], radius=100, percent=80))
+    print(radius_clustering(country = ["ALB"], radius=40, percent=20))
