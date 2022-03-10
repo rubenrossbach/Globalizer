@@ -89,7 +89,7 @@ def radius_clustering(country, radius=100, percent=80):
     df= advanced_get_data(country)
 
     total_pop = df['pop'].sum()
-    for k in range(1, 101):
+    for k in range(1, 201):
         kmeans = MiniBatchKMeans(n_clusters = k,
                                 max_iter = 300,
                                 batch_size=256*4,
